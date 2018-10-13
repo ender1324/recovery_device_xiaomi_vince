@@ -26,7 +26,17 @@
 #
 
 on fs
-    # needed to make qseecomd work in recovery
+    wait /dev/block/platform/soc/7824900.sdhci
+    symlink /dev/block/platform/soc/7824900.sdhci /dev/block/bootdevice
+    chmod 0660 /dev/qseecom
+    chown system drmrpc /dev/qseecom
+    chmod 0664 /dev/ion
+    chown system system /dev/ion
+    start pulldecryptfiles
+    install_keyring
+    setprop ro.hardware.bootctrl msm8953
+		
+    # Needed to make qseecomd work in recovery
     chmod 0777 /dev/qseecom
     chmod 0664 /dev/ion
     chown system system /dev/ion
@@ -41,7 +51,4 @@ service sbinqseecomd /sbin/qseecomd
     user root
     group root
     seclabel u:r:recovery:s0
-
-on fs
-    wait /dev/block/platform/soc/7824900.sdhci
-    symlink /dev/block/platform/soc/7824900.sdhci /dev/block/bootdevice
+#

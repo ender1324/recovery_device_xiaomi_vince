@@ -1,4 +1,5 @@
 # Device Tree for Xiaomi Redmi 5 Plus (vince)
+# Copyright (C) 2018 OrangeFox Recovery Project
 
 To compile
 

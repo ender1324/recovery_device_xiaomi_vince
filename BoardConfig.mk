@@ -22,6 +22,9 @@
 # bitrot and build breakages. Building a component unconditionally does
 # *not* include it on all devices, so it is safe even with hardware-specific
 # components.
+#
+# Copyright (C) 2018 OrangeFox Recovery Project
+#
 
 DEVICE_PATH := device/xiaomi/vince
 
@@ -56,18 +59,26 @@ FOX_BUILD_FULL_KERNEL_SOURCES := 1
 endif
 
 ifeq ($(FOX_BUILD_FULL_KERNEL_SOURCES),1)
-TARGET_KERNEL_CONFIG := vince_defconfig
-TARGET_KERNEL_SOURCE := kernel/xiaomi/vince
-BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-else
+  TARGET_KERNEL_SOURCE := kernel/xiaomi/vince
+  TARGET_KERNEL_CONFIG := vince-perf_defconfig
+  BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
+ifeq ($(FOX_NT36672_PANEL),1)
+  TARGET_KERNEL_SOURCE := kernel/xiaomi/vince-genom
+endif
 ifeq ($(FOX_EBBG_PANEL),1)
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image-ebbg.gz-dtb
-else
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image.gz-dtb
+  TARGET_KERNEL_SOURCE := kernel/xiaomi/vince-nougat
+endif
+else # FOX_BUILD_FULL_KERNEL_SOURCES==1
+  TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image.gz-dtb
+ifeq ($(FOX_EBBG_PANEL),1)
+  TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image-ebbg.gz-dtb
+endif
+ifeq ($(FOX_NT36672_PANEL),1)
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image-nt36672.gz-dtb
 endif
 PRODUCT_COPY_FILES += \
     $(TARGET_PREBUILT_KERNEL):kernel
-endif
+endif  # FOX_BUILD_FULL_KERNEL_SOURCES==1
 
 # Platform
 TARGET_BOARD_PLATFORM := msm8953
@@ -92,12 +103,10 @@ TARGET_HW_DISK_ENCRYPTION := true
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # TWRP Configuration
-#TW_EXCLUDE_DEFAULT_USB_INIT := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 RECOVERY_SDCARD_ON_DATA := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/soc/7000000.ssusb/7000000.dwc3/gadget/lun0/file"
-TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_EXCLUDE_SUPERSU := true
 TW_EXTRA_LANGUAGES := true
 TW_INCLUDE_CRYPTO := true
@@ -112,10 +121,18 @@ TW_INPUT_BLACKLIST := "hbtp_vm"
 BOARD_NEEDS_VENDORIMAGE_SYMLINK := false
 TARGET_COPY_OUT_VENDOR := vendor
 
-##
-TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
+#
+TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_MAX_BRIGHTNESS := 255
+TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
 TW_DEFAULT_LANGUAGE := en
 BOARD_SUPPRESS_SECURE_ERASE := true
 TW_IGNORE_MISC_WIPE_DATA := true
-##
+#
+TW_INCLUDE_FBE := true
+#
+ifeq ($(FOX_NT36672_PANEL),1)
+TW_MAX_BRIGHTNESS := 1625
+#TW_MAX_BRIGHTNESS := 4095
+endif
+
