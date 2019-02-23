@@ -1,6 +1,8 @@
 #
 # Copyright 2016 The Android Open Source Project
 #
+# Copyright (C) 2018-2019 OrangeFox Recovery Project
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -22,8 +24,6 @@
 # bitrot and build breakages. Building a component unconditionally does
 # *not* include it on all devices, so it is safe even with hardware-specific
 # components.
-#
-# Copyright (C) 2018 OrangeFox Recovery Project
 #
 
 DEVICE_PATH := device/xiaomi/vince
@@ -60,11 +60,14 @@ endif
 
 ifeq ($(FOX_BUILD_FULL_KERNEL_SOURCES),1)
   TARGET_KERNEL_SOURCE := kernel/xiaomi/vince
-  TARGET_KERNEL_CONFIG := vince-perf_defconfig
+#  TARGET_KERNEL_CONFIG := vince-perf_defconfig
+  TARGET_KERNEL_CONFIG := vince_defconfig
   BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 else # FOX_BUILD_FULL_KERNEL_SOURCES==1
   TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image.gz-dtb
-  
+ifeq ($(FOX_USE_STOCK_KERNEL),1)
+  TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image-stock-8-11-15.gz-dtb
+endif    
   PRODUCT_COPY_FILES += \
     $(TARGET_PREBUILT_KERNEL):kernel
 endif  # FOX_BUILD_FULL_KERNEL_SOURCES==1
@@ -117,7 +120,13 @@ TW_DEFAULT_LANGUAGE := en
 BOARD_SUPPRESS_SECURE_ERASE := true
 TW_IGNORE_MISC_WIPE_DATA := true
 TW_INCLUDE_FBE := true
+TW_INCLUDE_FUSE_EXFAT := true
+TARGET_USES_64_BIT_BINDER := true
 TW_MAX_BRIGHTNESS := 255
 ##
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+ifeq ($(FOX_USE_STOCK_KERNEL),1)
+TW_DEFAULT_BRIGHTNESS := 1650
+TW_MAX_BRIGHTNESS := 4095
+endif
 #
