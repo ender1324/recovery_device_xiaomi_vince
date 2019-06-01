@@ -26,7 +26,7 @@
 # components.
 #
 
-DEVICE_PATH := device/xiaomi/vince
+LOCAL_PATH := device/xiaomi/vince
 
 # Architecture
 TARGET_BOARD_SUFFIX := _64
@@ -64,9 +64,9 @@ ifeq ($(FOX_BUILD_FULL_KERNEL_SOURCES),1)
   TARGET_KERNEL_CONFIG := vince_defconfig
   BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 else # FOX_BUILD_FULL_KERNEL_SOURCES==1
-  TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image.gz-dtb
+  TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/Image.gz-dtb
 ifeq ($(FOX_USE_STOCK_KERNEL),1)
-  TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/Image-stock-8-11-15.gz-dtb
+  TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/Image-stock-8-11-15.gz-dtb
 endif    
   PRODUCT_COPY_FILES += \
     $(TARGET_PREBUILT_KERNEL):kernel
@@ -95,7 +95,7 @@ TARGET_HW_DISK_ENCRYPTION := true
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 
 # TWRP Configuration
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/recovery.fstab
 RECOVERY_SDCARD_ON_DATA := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/soc/7000000.ssusb/7000000.dwc3/gadget/lun0/file"
@@ -105,15 +105,9 @@ TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_NTFS_3G := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_THEME := portrait_hdpi
-
-# Disable Mouse Cursor
 TW_INPUT_BLACKLIST := "hbtp_vm"
-
-# Treble
 BOARD_NEEDS_VENDORIMAGE_SYMLINK := false
 TARGET_COPY_OUT_VENDOR := vendor
-
-#
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
 TW_DEFAULT_LANGUAGE := en
@@ -122,11 +116,11 @@ TW_IGNORE_MISC_WIPE_DATA := true
 TW_INCLUDE_FBE := true
 TW_INCLUDE_FUSE_EXFAT := true
 TARGET_USES_64_BIT_BINDER := true
-TW_MAX_BRIGHTNESS := 255
-##
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+TW_MAX_BRIGHTNESS := 255
 ifeq ($(FOX_USE_STOCK_KERNEL),1)
 TW_DEFAULT_BRIGHTNESS := 1650
 TW_MAX_BRIGHTNESS := 4095
 endif
 #
+
