@@ -1,9 +1,8 @@
 # Device Tree for Xiaomi Redmi 5 Plus (vince)
-# Copyright (C) 2018 OrangeFox Recovery Project
 
 To compile
 
-. build/envsetup.sh && lunch omni_vince-userdebug && make -j8 recoveryimage
+export ALLOW_MISSING_DEPENDENCIES=true; source build/envsetup.sh; lunch omni_vince-eng; mka recoveryimage
 
 ## Device picture
 
