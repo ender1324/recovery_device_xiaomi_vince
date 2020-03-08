@@ -13,5 +13,5 @@ $(call inherit-product, device/xiaomi/vince/device.mk)
 PRODUCT_NAME := omni_vince
 PRODUCT_DEVICE := vince
 PRODUCT_BRAND := Xiaomi
-PRODUCT_MANUFACTURER := Wingtech
+PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_MODEL := Redmi 5 Plus
