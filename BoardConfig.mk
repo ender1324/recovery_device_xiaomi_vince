@@ -54,24 +54,6 @@ BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_RAMDISK_OFFSET := 0x01000000
 
-ifeq ($(FOX_BUILD_FULL_KERNEL_SOURCES),)
-FOX_BUILD_FULL_KERNEL_SOURCES := 1
-endif
-
-ifeq ($(FOX_BUILD_FULL_KERNEL_SOURCES),1)
-  TARGET_KERNEL_SOURCE := kernel/xiaomi/vince
-#  TARGET_KERNEL_CONFIG := vince-perf_defconfig
-  TARGET_KERNEL_CONFIG := vince_defconfig
-  BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-else # FOX_BUILD_FULL_KERNEL_SOURCES==1
-  TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/Image.gz-dtb
-ifeq ($(FOX_USE_STOCK_KERNEL),1)
-  TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/prebuilt/Image-stock-8-11-15.gz-dtb
-endif    
-  PRODUCT_COPY_FILES += \
-    $(TARGET_PREBUILT_KERNEL):kernel
-endif  # FOX_BUILD_FULL_KERNEL_SOURCES==1
-
 # Platform
 TARGET_BOARD_PLATFORM := msm8953
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno506
@@ -132,6 +114,7 @@ SHRP_EXTERNAL := /external_sd
 SHRP_INTERNAL := /sdcard
 SHRP_OTG := /usb_otg
 SHRP_FLASH := 1
+SHRP_FONP_1 := /sys/class/leds/led:torch_0/brightness
 SHRP_REC := /dev/block/bootdevice/by-name/recovery
 SHRP_REC_TYPE := Treble
 SHRP_DEVICE_TYPE := A_Only
